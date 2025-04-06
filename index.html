@@ -125,7 +125,7 @@
         leaveDuration: document.getElementById("leaveDuration").value
       };
 
-      fetch("PASTE_YOUR_WEBAPP_URL_HERE", {
+      fetch("https://script.google.com/macros/s/AKfycby9KQ5UvjkDp1D9JQRsBIl8TX-RBFEm98ORw95WmzxuZzZt0ckTPhLT3XzFVRTfltJoqw/exec", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" }
