@@ -84,7 +84,7 @@ function submitForm() {
     leaveType: document.getElementById("leaveType").value,
     leaveDuration: document.getElementById("leaveDuration").value,
   };
-
+  alert("Leave Duration: "+leaveDuration)
   fetch("https://script.google.com/macros/s/AKfycby9KQ5UvjkDp1D9JQRsBIl8TX-RBFEm98ORw95WmzxuZzZt0ckTPhLT3XzFVRTfltJoqw/exec", {
         method: "POST",
     body: JSON.stringify(formData),
