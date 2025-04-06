@@ -76,39 +76,27 @@
   </form>
 
   <script>
-    document.getElementById("leaveForm").addEventListener("submit", function (e) {
-      e.preventDefault();
+function submitForm() {
+  const formData = {
+    empCode: document.getElementById("empCode").value,
+    fromDate: document.getElementById("fromDate").value,
+    toDate: document.getElementById("toDate").value,
+    leaveType: document.getElementById("leaveType").value,
+    leaveDuration: document.getElementById("leaveDuration").value,
+  };
 
-      const data = {
-        empCode: document.getElementById("empCode").value,
-        fromDate: document.getElementById("fromDate").value,
-        toDate: document.getElementById("toDate").value,
-        leaveType: document.getElementById("leaveType").value,
-        leaveDuration: document.getElementById("leaveDuration").value
-      };
-
-      fetch("https://script.google.com/macros/s/AKfycby9KQ5UvjkDp1D9JQRsBIl8TX-RBFEm98ORw95WmzxuZzZt0ckTPhLT3XzFVRTfltJoqw/exec", {
+  fetch("https://script.google.com/macros/s/AKfycby9KQ5UvjkDp1D9JQRsBIl8TX-RBFEm98ORw95WmzxuZzZt0ckTPhLT3XzFVRTfltJoqw/exec", {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.json())
-      .then(response => {
-        if (response.result === "success") {
-          alert("Leave Submitted Successfully!");
-          document.getElementById("leaveForm").reset();
-        } else {
-          alert("Submission failed.");
-        }
-      })
-      .catch(err => {
-        alert("Working");
-        alert("Error: " + err);
-      });
-    });
-  </script>
-
+    body: JSON.stringify(formData),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.json())
+  .then(data => alert("Form submitted!"))
+  .catch(error => alert("Submission error: " + error));
+}
+</script>
+    
 </body>
 </html>
