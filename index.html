@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Leave Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      margin-top: 10px;
+      display: block;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="leaveForm">
+    <h2>Leave Application</h2>
+
+    <label for="empCode">Employee Code</label>
+    <select id="empCode" required>
+      <option value="">Select Employee</option>
+      <option value="EMP001">EMP001</option>
+      <option value="EMP002">EMP002</option>
+      <option value="EMP003">EMP003</option>
+    </select>
+
+    <label for="fromDate">From Date</label>
+    <input type="date" id="fromDate" required>
+
+    <label for="toDate">To Date</label>
+    <input type="date" id="toDate" required>
+
+    <label for="leaveType">Leave Type</label>
+    <select id="leaveType" required>
+      <option value="">Select Type</option>
+      <option value="Casual">Casual</option>
+      <option value="Sick">Sick</option>
+      <option value="Earned">Earned</option>
+    </select>
+
+    <label for="leaveDuration">Duration</label>
+    <select id="leaveDuration" required>
+      <option value="">Select Duration</option>
+      <option value="F">Full Day</option>
+      <option value="1">First Half</option>
+      <option value="2">Second Half</option>
+    </select>
+
+    <button type="submit">Submit Leave</button>
+  </form>
+
+  <script>
+    document.getElementById("leaveForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = {
+        empCode: document.getElementById("empCode").value,
+        fromDate: document.getElementById("fromDate").value,
+        toDate: document.getElementById("toDate").value,
+        leaveType: document.getElementById("leaveType").value,
+        leaveDuration: document.getElementById("leaveDuration").value
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbw33Mwc-A4siAJq2XClIt_LhZIb5z--nzCNvcOuz0uF/dev", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.result === "success") {
+          alert("Leave Submitted Successfully!");
+          document.getElementById("leaveForm").reset();
+        } else {
+          alert("Submission failed.");
+        }
+      })
+      .catch(err => {
+        alert("Error: " + err);
+      });
+    });
+  </script>
+
+</body>
+</html>
