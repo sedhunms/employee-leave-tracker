@@ -1,149 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Leave Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Leave Application</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      background: white;
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
       padding: 20px;
-      max-width: 400px;
-      margin: 40px auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
+      line-height: 1.6;
     }
-
-    h2 {
+    h1 {
       text-align: center;
-      color: #333;
+      color: #2c3e50;
+      margin-bottom: 30px;
     }
-
+    .form-group {
+      margin-bottom: 20px;
+    }
     label {
       display: block;
-      margin-top: 15px;
-      color: #444;
-      font-weight: 500;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #34495e;
     }
-
-    input, select, button {
+    input, select {
       width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      outline: none;
-    }
-
-    input:focus, select:focus {
-      border-color: #007bff;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      margin-top: 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      border: none;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .success, .error {
-      margin-top: 15px;
-      text-align: center;
-      font-weight: bold;
       padding: 10px;
-      border-radius: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
     }
-
-    .success {
-      color: #155724;
-      background-color: #d4edda;
+    .form-row {
+      display: flex;
+      gap: 20px;
     }
-
-    .error {
-      color: #721c24;
-      background-color: #f8d7da;
+    .form-row .form-group {
+      flex: 1;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    #success-message {
+      display: none;
+      background-color: #2ecc71;
+      color: white;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    #leaveRecords {
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Leave Request</h2>
+  <h1>Employee Leave Application</h1>
+  
+  <form id="leaveForm" action="https://script.google.com/macros/s/AKfycby_KYbwOFN7GIof4jx4Q8mQ_pz1oSpzWw51lltDbvNW9ucL0FBcASWTzSZ4LMyggLcaLQ/exec" method="POST">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="codeNo">Employee Code:</label>
+        <input type="text" id="codeNo" name="codeNo" required />
+      </div>
+    </div>
 
-    <label for="empCode">Employee Code:</label>
-    <input type="text" id="empCode" required>
+    <div class="form-group">
+      <label for="leaveType">Leave Type:</label>
+      <select id="leaveType" name="leaveType" required>
+        <option value="">Select Leave Type</option>
+        <option value="CL">Casual Leave (CL)</option>
+        <option value="HPL">HPL</option>
+        <option value="LOP">Loss of Pay (LOP)</option>
+      </select>
+    </div>
 
-    <label for="fromDate">From Date:</label>
-    <input type="date" id="fromDate" required>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required />
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" required />
+      </div>
+    </div>
 
-    <label for="toDate">To Date:</label>
-    <input type="date" id="toDate" required>
+    <div class="form-group">
+      <label for="session">Session:</label>
+      <select id="session" name="session" required>
+        <option value="">Select Session</option>
+        <option value="F">Full Day (F)</option>
+        <option value="1">First Half (1)</option>
+        <option value="2">Second Half (2)</option>
+      </select>
+    </div>
 
-    <label for="leaveType">Leave Type:</label>
-    <select id="leaveType">
-      <option value="Sick">Sick</option>
-      <option value="Casual">Casual</option>
-      <option value="Earned">Earned</option>
-    </select>
+    <button type="submit">Submit Leave Application</button>
+  </form>
 
-    <label for="leaveDuration">Leave Duration:</label>
-    <select id="leaveDuration">
-      <option value="F">Full Day</option>
-      <option value="1">First Half</option>
-      <option value="2">Second Half</option>
-    </select>
+  <div id="success-message">
+    Your leave application has been submitted successfully!
+  </div>
 
-    <button onclick="submitForm()">Submit</button>
-
-    <div id="responseMsg"></div>
+  <div id="leaveRecords">
+    <h2>Your Leave History</h2>
+    <table id="recordsTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Leave Type</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Session</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
   <script>
-    function submitForm() {
-      const data = {
-        empCode: document.getElementById("empCode").value,
-        fromDate: document.getElementById("fromDate").value,
-        toDate: document.getElementById("toDate").value,
-        leaveType: document.getElementById("leaveType").value,
-        leaveDuration: document.getElementById("leaveDuration").value
-      };
-
-      fetch("https://script.google.com/macros/s/AKfycby9KQ5UvjkDp1D9JQRsBIl8TX-RBFEm98ORw95WmzxuZzZt0ckTPhLT3XzFVRTfltJoqw/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.json())
-      .then(result => {
-        const msg = document.getElementById("responseMsg");
-        if (result.result === "success") {
-          msg.innerHTML = '<div class="success">Leave submitted successfully!</div>';
+    const form = document.getElementById("leaveForm");
+    const successMessage = document.getElementById("success-message");
+    const recordsTableBody = document.querySelector("#recordsTable tbody");
+  
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const name = form.name.value.trim();
+      const codeNo = form.codeNo.value.trim();
+      const leaveType = form.leaveType.value;
+      const startDate = new Date(form.startDate.value);
+      const endDate = new Date(form.endDate.value);
+      const session = form.session.value;
+  
+      // === Validation ===
+      if (endDate < startDate) {
+        alert("End date must be after start date.");
+        return;
+      }
+  
+      if (startDate.getTime() === endDate.getTime() && !session) {
+        alert("Please select a session for a single day leave.");
+        return;
+      }
+  
+      const formData = new FormData(form);
+  
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: formData,
+        });
+  
+        const result = await response.json();
+  
+        if (result.success) {
+          successMessage.style.display = "block";
+          form.reset();
+          fetchLeaveHistory(codeNo); // Refresh leave records
         } else {
-          msg.innerHTML = '<div class="error">Error: ' + result.message + '</div>';
+          alert("Failed to submit leave application. Please try again.");
         }
-      })
-      .catch(error => {
-        document.getElementById("responseMsg").innerHTML =
-          '<div class="error">Fetch Error: ' + error + '</div>';
-      });
+      } catch (error) {
+        console.error("Submission error:", error);
+        alert("Error submitting the form.");
+      }
+    });
+  
+    async function fetchLeaveHistory(codeNo) {
+      function formatDateString(dateStr) {
+        const date = new Date(dateStr);
+        if (!isNaN(date)) {
+          return date.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+        }
+        return dateStr || ""; // fallback to original string if parsing fails
+      }
+
+      try {
+        // Encode the codeNo in the URL to ensure special characters are handled correctly
+        const url = `https://script.google.com/macros/s/AKfycby_KYbwOFN7GIof4jx4Q8mQ_pz1oSpzWw51lltDbvNW9ucL0FBcASWTzSZ4LMyggLcaLQ/exec?codeNo=${encodeURIComponent(codeNo)}`;
+        console.log('Requesting URL:', url); // Log the URL to see if it's formed correctly
+
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log("Employee Code Sent:", codeNo);
+
+        console.log('Leave History Data:', data); // Log the response to debug if the data is returned correctly
+
+        if (Array.isArray(data.records)) {
+          recordsTableBody.innerHTML = "";
+
+          if (data.records.length === 0) {
+            recordsTableBody.innerHTML = `<tr><td colspan="6">No leave records found.</td></tr>`;
+            return;
+          }
+
+          data.records.forEach((record) => {
+            let formattedDate = "";
+            if (record.date) {
+              const parsedDate = new Date(record.date);
+              if (!isNaN(parsedDate)) {
+                formattedDate = parsedDate.toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                });
+              } else {
+                console.warn("Invalid date format:", record.date);
+              }
+            }
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${formattedDate}</td>
+              <td>${record.leaveType || ""}</td>
+              <td>${formatDateString(record.startDate)}</td>
+              <td>${formatDateString(record.endDate)}</td>
+              <td>${record.session || ""}</td>
+              <td>${record.status || ""}</td>
+            `;
+            recordsTableBody.appendChild(row);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching history:", error);
+        recordsTableBody.innerHTML = `<tr><td colspan="6">Error loading leave history.</td></tr>`;
+      }
     }
+
   </script>
+     
 </body>
 </html>
