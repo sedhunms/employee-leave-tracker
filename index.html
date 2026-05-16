@@ -424,6 +424,7 @@
       }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <header>
@@ -602,10 +603,57 @@
     </div>
   </div>
 
+  <div class="tab-content" id="export-tab">
+  <div class="card">
+    <h2>Export Leave Records</h2>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="exportFromDate">From Date</label>
+        <input type="date" id="exportFromDate" />
+      </div>
+
+      <div class="form-group">
+        <label for="exportToDate">To Date</label>
+        <input type="date" id="exportToDate" />
+      </div>
+
+      <div class="form-group" style="display:flex;align-items:flex-end;">
+        <button type="button" onclick="loadExportData()">
+          <i class="fas fa-search"></i> Proceed
+        </button>
+      </div>
+    </div>
+
+    <div id="exportTableSection" style="display:none;">
+      <table id="exportTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Employee Code</th>
+            <th>Leave Type</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Session</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div style="margin-top:20px;">
+        <button type="button" onclick="exportToExcel()">
+          <i class="fas fa-file-excel"></i> Export to XLSX
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <script>
     // Global variables
     let allLeaveRecords = [];
     let currentCodeNo = '';
+    let exportRecords = [];
     
     // Tab switching functionality
     document.querySelectorAll('.tab').forEach(tab => {
@@ -805,6 +853,82 @@
       
       countDisplay.textContent = `${label}: ${count}`;
     }
+
+    async function loadExportData() {
+  if (records.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;">No records found</td>
+      </tr>
+    `;
+
+    document.getElementById("exportTableSection").style.display = "block";
+    return;
+  }
+
+  const formatDisplayDate = (dateStr) => {
+    const date = new Date(dateStr);
+
+    return !isNaN(date)
+      ? date.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "";
+  };
+
+  records.forEach(record => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${record.name || ""}</td>
+      <td>${record.codeNo || ""}</td>
+      <td>${record.leaveType || ""}</td>
+      <td>${formatDisplayDate(record.startDate)}</td>
+      <td>${formatDisplayDate(record.endDate)}</td>
+      <td>${record.session || ""}</td>
+    `;
+
+    tbody.appendChild(row);
+  });
+
+  document.getElementById("exportTableSection").style.display = "block";
+}
+
+function exportToExcel() {
+  if (exportRecords.length === 0) {
+    alert("No records available to export");
+    return;
+  }
+
+  const formatExcelDate = (dateStr) => {
+    const date = new Date(dateStr);
+
+    if (isNaN(date)) return "";
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}.${month}.${year}`;
+  };
+
+  const exportData = exportRecords.map(record => ({
+    "Employee Code": record.codeNo || "",
+    "Leave Type": record.leaveType || "",
+    "From Date": formatExcelDate(record.startDate),
+    "To Date": formatExcelDate(record.endDate),
+    "Session": record.session || ""
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Leave Records");
+
+  XLSX.writeFile(workbook, "Leave_Records.xlsx");
+}
     
     function renderRecords(records) {
       recordsTableBody.innerHTML = "";
