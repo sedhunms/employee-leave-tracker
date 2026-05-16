@@ -855,16 +855,89 @@
     }
 
     async function loadExportData() {
+
+  const fromDate = document.getElementById("exportFromDate").value;
+  const toDate = document.getElementById("exportToDate").value;
+
+  if (!fromDate || !toDate) {
+    alert("Please select From Date and To Date");
+    return;
+  }
+
+  try {
+
+    const url =
+      `https://script.google.com/macros/s/AKfycby_KYbwOFN7GIof4jx4Q8mQ_pz1oSpzWw51lltDbvNW9ucL0FBcASWTzSZ4LMyggLcaLQ/exec?fromDate=${fromDate}&toDate=${toDate}`;
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    exportRecords = data.records || [];
+
+    renderExportTable(exportRecords);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Error loading export data");
+  }
+}
+
+
+    function renderExportTable(records) {
+
+  const tbody = document.querySelector("#exportTable tbody");
+
+  tbody.innerHTML = "";
+
   if (records.length === 0) {
+
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align:center;">No records found</td>
+        <td colspan="6" style="text-align:center;">
+          No records found
+        </td>
       </tr>
     `;
 
     document.getElementById("exportTableSection").style.display = "block";
+
     return;
   }
+
+  const formatDisplayDate = (dateStr) => {
+
+    const date = new Date(dateStr);
+
+    return !isNaN(date)
+      ? date.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "";
+  };
+
+  records.forEach(record => {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${record.name || ""}</td>
+      <td>${record.codeNo || ""}</td>
+      <td>${record.leaveType || ""}</td>
+      <td>${formatDisplayDate(record.startDate)}</td>
+      <td>${formatDisplayDate(record.endDate)}</td>
+      <td>${record.session || ""}</td>
+    `;
+
+    tbody.appendChild(row);
+  });
+
+  document.getElementById("exportTableSection").style.display = "block";
+}
 
   const formatDisplayDate = (dateStr) => {
     const date = new Date(dateStr);
